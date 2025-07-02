@@ -1,4 +1,5 @@
 terraform {
+  # Tested with OpenTofu 1.10.1
   required_version = ">= 1.10.1"
 
   required_providers {
