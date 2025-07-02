@@ -5,9 +5,11 @@
 
 A simple tool to quickly provision and manage a cost-effective Amazon EKS (Elastic Kubernetes Service) cluster on AWS, designed for rapid prototyping, dev/test environments, and learning Kubernetes on the cloud. This is NOT mean for production use!
 
+It has 2 _modes_. It can either create a dedicated VPC and put the EKS cluster into it, or it can use an existing VPC.
+
 To a normal Terraform user, you'll find this tool a little strange because:
 
-* It avoids modules almost entirely in favour of pure resources. (There's 1 module for VPC endpoints, but I'll be removing that soon.)  This is frankly because I've found all the big public modules to be too inflexible for my needs, and too prone to breaking changes.
+* It avoids public modules almost entirely in favour of pure resources. (There's 1 public module for VPC endpoints, but I'll be removing that soon.)  This is frankly because I've found all the big public modules to be too inflexible for my needs, and too prone to breaking changes.
 * It avoids being too parameterized.  Let's just call it opinionated. Again, this tool isn't meant for flexibility, it's meant for simplicity and ease of use.
 
 **THIS DOCUMENT IS A WORK IN PROGRESS. IT IS NOT COMPLETE AND MAY CHANGE SIGNIFICANTLY.**

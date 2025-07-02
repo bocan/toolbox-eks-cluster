@@ -16,7 +16,7 @@ resource "aws_eks_cluster" "this" {
   version  = "1.32"
 
   vpc_config {
-    subnet_ids              = aws_subnet.private[*].id
+    subnet_ids = local.create_vpc ? module.vpc[0].private_subnet_ids : module.vpclookup[0].private_subnet_ids
     endpoint_private_access = true
     endpoint_public_access  = true
   }
@@ -92,7 +92,7 @@ resource "aws_eks_node_group" "managed" {
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = "${local.project_id}-managed"
   node_role_arn   = aws_iam_role.nodes.arn
-  subnet_ids      = aws_subnet.private[*].id
+  subnet_ids = local.create_vpc ? module.vpc[0].private_subnet_ids : module.vpclookup[0].private_subnet_ids
 
   scaling_config {
     desired_size = 2

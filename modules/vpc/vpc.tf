@@ -1,14 +1,14 @@
 resource "aws_vpc" "this" {
-  cidr_block                       = local.cidr_block
+  cidr_block                       = var.cidr_block
   enable_dns_support               = true
   enable_dns_hostnames             = true
   assign_generated_ipv6_cidr_block = true
-  tags                             = merge(local.common_tags, { Name = "${local.project_id}-vpc" })
+  tags                             = merge(var.common_tags, { Name = "${var.project_id}-vpc" })
 }
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
-  tags   = merge(local.common_tags, { Name = "${local.project_id}-igw" })
+  tags   = merge(var.common_tags, { Name = "${var.project_id}-igw" })
 }
 
 resource "aws_subnet" "public" {
@@ -20,7 +20,7 @@ resource "aws_subnet" "public" {
   assign_ipv6_address_on_creation = true
   availability_zone               = element(data.aws_availability_zones.available.names, count.index)
 
-  tags = merge(local.common_tags, { Name = "${local.project_id}-public-${count.index}" })
+  tags = merge(var.common_tags, { Name = "${var.project_id}-public-${count.index}" })
 }
 
 
@@ -32,18 +32,18 @@ resource "aws_subnet" "private" {
   assign_ipv6_address_on_creation = true
   availability_zone               = element(data.aws_availability_zones.available.names, count.index)
 
-  tags = merge(local.common_tags, { Name = "${local.project_id}-private-${count.index}" })
+  tags = merge(var.common_tags, { Name = "${var.project_id}-private-${count.index}" })
 }
 
 resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public[0].id
-  tags          = merge(local.common_tags, { Name = "${local.project_id}-nat" })
+  tags          = merge(var.common_tags, { Name = "${var.project_id}-nat" })
 }
 
 resource "aws_eip" "nat" {
   domain = "vpc"
-  tags   = merge(local.common_tags, { Name = "${local.project_id}-eip" })
+  tags   = merge(var.common_tags, { Name = "${var.project_id}-eip" })
 }
 
 resource "aws_route_table" "public" {
@@ -54,7 +54,7 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.this.id
   }
 
-  tags = merge(local.common_tags, { Name = "${local.project_id}-public-rt" })
+  tags = merge(var.common_tags, { Name = "${var.project_id}-public-rt" })
 }
 
 resource "aws_route_table_association" "public" {
@@ -71,7 +71,7 @@ resource "aws_route_table" "private" {
     nat_gateway_id = aws_nat_gateway.this.id
   }
 
-  tags = merge(local.common_tags, { Name = "${local.project_id}-private-rt" })
+  tags = merge(var.common_tags, { Name = "${var.project_id}-private-rt" })
 }
 
 resource "aws_route_table_association" "private" {
@@ -84,7 +84,7 @@ resource "aws_route_table_association" "private" {
 # CloudWatch & Flow Logs
 # ------------------------
 resource "aws_iam_role" "flow_logs" {
-  name = "${local.project_id}-flow-logs-role"
+  name = "${var.project_id}-flow-logs-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -97,11 +97,11 @@ resource "aws_iam_role" "flow_logs" {
     }]
   })
 
-  tags = merge(local.common_tags, { Name = "${local.project_id}-flow-logs-role" })
+  tags = merge(var.common_tags, { Name = "${var.project_id}-flow-logs-role" })
 }
 
 resource "aws_iam_role_policy" "flow_logs" {
-  name = "${local.project_id}-flow-logs-policy"
+  name = "${var.project_id}-flow-logs-policy"
   role = aws_iam_role.flow_logs.id
 
   policy = jsonencode({
@@ -120,9 +120,9 @@ resource "aws_iam_role_policy" "flow_logs" {
 }
 
 resource "aws_cloudwatch_log_group" "vpc_logs" {
-  name              = "/aws/vpc/${local.project_id}-flow-logs"
+  name              = "/aws/vpc/${var.project_id}-flow-logs"
   retention_in_days = 3
-  tags              = merge(local.common_tags, { Name = "${local.project_id}-flow-logs" })
+  tags              = merge(var.common_tags, { Name = "${var.project_id}-flow-logs" })
 }
 
 resource "aws_flow_log" "vpc" {

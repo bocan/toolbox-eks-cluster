@@ -11,12 +11,12 @@ module "vpc_endpoints" {
       service             = service
       subnet_ids          = aws_subnet.private[*].id
       private_dns_enabled = true
-      tags                = { Name = "${local.project_id}-${service}" }
+      tags                = { Name = "${var.project_id}-${service}" }
     }
   }
 
   create_security_group      = true
-  security_group_name_prefix = "${local.project_id}-vpc-endpoints-"
+  security_group_name_prefix = "${var.project_id}-vpc-endpoints-"
   security_group_description = "VPC endpoint security group"
   security_group_rules = {
     ingress_https = {
@@ -25,6 +25,6 @@ module "vpc_endpoints" {
     }
   }
 
-  tags = local.common_tags
+  tags = var.common_tags
 
 }

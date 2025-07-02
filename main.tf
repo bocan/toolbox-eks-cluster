@@ -15,4 +15,24 @@ locals {
     Owner       = "Chris Funderburg"
   }
   project_id = "${local.project_name}-${local.shortname}"
+
+  create_vpc = false
+  vpc_id     = "vpc-0a1b2c3d4e5f6g7h8" # Replace with your existing VPC ID
+}
+
+module "vpc" {
+  count  = local.create_vpc ? 1 : 0
+  source = "./modules/vpc"
+
+  cidr_block  = local.cidr_block
+  common_tags = local.common_tags
+  project_id  = local.project_id
+}
+
+module "vpclookup" {
+  count  = local.create_vpc ? 0 : 1
+  source = "./modules/vpclookup"
+
+  vpc_id      = local.vpc_id
+  #cidr_block  = local.cidr_block
 }
