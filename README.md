@@ -3,7 +3,12 @@
 [![Pre-commit Checks](https://img.shields.io/badge/pre--commit-enabled-brightgreen)](https://pre-commit.com/)
 [![Terraform](https://img.shields.io/badge/terraform--docs-automated-blueviolet)](https://terraform-docs.io/)
 
-A simple tool to quickly provision and manage a cost-effective Amazon EKS (Elastic Kubernetes Service) cluster on AWS, designed for rapid prototyping, dev/test environments, and learning Kubernetes on the cloud.
+A simple tool to quickly provision and manage a cost-effective Amazon EKS (Elastic Kubernetes Service) cluster on AWS, designed for rapid prototyping, dev/test environments, and learning Kubernetes on the cloud. This is NOT mean for production use!
+
+To a normal Terraform user, you'll find this tool a little strange because:
+
+* It avoids modules almost entirely in favour of pure resources. (There's 1 module for VPC endpoints, but I'll be removing that soon.)  This is frankly because I've found all the big public modules to be too inflexible for my needs, and too prone to breaking changes.
+* It avoids being too parameterized.  Let's just call it opinionated. Again, this tool isn't meant for flexibility, it's meant for simplicity and ease of use.
 
 **THIS DOCUMENT IS A WORK IN PROGRESS. IT IS NOT COMPLETE AND MAY CHANGE SIGNIFICANTLY.**
 
@@ -25,6 +30,12 @@ A simple tool to quickly provision and manage a cost-effective Amazon EKS (Elast
 - [AWS CLI](https://aws.amazon.com/cli/) configured with credentials
 - [kubectl](https://kubernetes.io/docs/tasks/tools/) (for interacting with the cluster)
 - [pre-commit](https://pre-commit.com/) (for local checks)
+
+---
+
+## Costings
+
+If this thing is run solidly for 1 month, it will cost a minimum of $206. That's **before** any Karpenter nodes are added. I'd make a conservative guess that it could maybe double that once you start adding pods in anger.  But all that said, this is designed to be run for a few **hours** at a time, not 24/7. Turn it on, play with it, then turn it off. If you do that, you can expect it to cost between 3 and 6 dollers per day - assuming 8 hours of usage per day.
 
 ---
 
@@ -92,6 +103,7 @@ module "eks" {
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 3.0.2 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.19.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.37.1 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | >= 2.5.3 |
 
 ## Providers
 
@@ -101,7 +113,7 @@ module "eks" {
 | <a name="provider_helm"></a> [helm](#provider\_helm) | >= 3.0.2 |
 | <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | >= 1.19.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | >= 2.37.1 |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
+| <a name="provider_local"></a> [local](#provider\_local) | >= 2.5.3 |
 
 ## Modules
 
@@ -191,4 +203,3 @@ Contributions, issues, and feature requests are welcome! Please open an issue or
 ## Maintainer
 
 Chris Funderburg ([@bocan](https://github.com/bocan))
-
