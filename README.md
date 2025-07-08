@@ -21,15 +21,14 @@ To a normal Terraform user, you'll find this tool a little strange because:
 - **One-command EKS Cluster Creation:** Spin up an EKS cluster with sane defaults.
 - **Cost-focused:** Uses minimal resources and SPOT instances to keep AWS charges low.
 - **Customizable:** Easy to tweak for your needs.
-- **Terraform-based:** Infrastructure as Code using [Terraform](https://www.terraform.io/).
+- **OpenTofu / Terraform based:** Infrastructure as Code using [OpenTofu](https://opentofu.org/) or [Terraform](https://www.terraform.io/).
 - **Pre-commit hooks:** Ensures code quality, formatting, and updates to documentation via [terraform-docs](https://terraform-docs.io/).
 
 ---
 
 ## Requirements
 
-- [Terraform](https://www.terraform.io/downloads.html) >= 1.0.0
-- [AWS CLI](https://aws.amazon.com/cli/) configured with credentials
+- [OpenTofu](https://opentofu.org/docs/intro/install/) or [Terraform](https://www.terraform.io/downloads.html) >= 1.0.0
 - [kubectl](https://kubernetes.io/docs/tasks/tools/) (for interacting with the cluster)
 - [pre-commit](https://pre-commit.com/) (for local checks)
 
@@ -41,7 +40,7 @@ If this thing is run solidly for 1 month, it will cost a minimum of $206. That's
 
 ---
 
-## Getting Started
+## Getting Started - using OpenTofu
 
 ### 1. Clone the repo
 
@@ -59,7 +58,7 @@ pre-commit install
 ### 3. Initialize Terraform
 
 ```bash
-terraform init
+tofu init
 ```
 
 ### 4. Review and set variables
@@ -69,13 +68,13 @@ Edit `terraform.tfvars` or set variables as needed (see [Inputs](#inputs) below)
 ### 5. Create your EKS cluster
 
 ```bash
-terraform apply
+tofu apply
 ```
 
 ### 6. (Optional) Destroy your EKS cluster
 
 ```bash
-terraform destroy
+tofu destroy
 ```
 
 ---
@@ -175,7 +174,6 @@ No outputs.
 ## Security
 
 - Follows AWS and Kubernetes security best practices where possible.
-- Uses Kyverno policies for pod security by default (see `manifests/kubernetes/kustomize/components/cluster-core/customizations/kyverno-policies.yaml`).
 - Review IAM roles and policies before applying to production environments.
 
 ---
