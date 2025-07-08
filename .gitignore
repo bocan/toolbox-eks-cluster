@@ -1,8 +1,6 @@
 # Local .terraform directories
 **/.terraform/*
 
-karpenter-role-entry.yaml
-
 # .tfstate files
 *.tfstate
 *.tfstate.*

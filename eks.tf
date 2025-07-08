@@ -115,7 +115,7 @@ resource "aws_eks_node_group" "managed" {
 # Node IAM Role
 # ------------------------
 resource "aws_iam_role" "nodes" {
-  name               = "${local.project_id}-nodes"
+  name               = "${local.project_id}-nodes-role"
   assume_role_policy = data.aws_iam_policy_document.nodes_assume.json
   tags               = merge(local.common_tags, { Name = "${local.project_id}-nodes-role" })
 }
@@ -139,11 +139,11 @@ resource "aws_iam_openid_connect_provider" "eks" {
   url             = aws_eks_cluster.this.identity[0].oidc[0].issuer
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0afd10b30"]
-  tags            = merge(local.common_tags, { Name = "${local.project_id}--oidc" })
+  tags            = merge(local.common_tags, { Name = "${local.project_id}-oidc" })
 }
 
 resource "aws_iam_role" "karpenter_irsa" {
-  name = "${local.project_id}-karpenter-irsa"
+  name = "${local.project_id}-karpenter-irsa-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -159,7 +159,7 @@ resource "aws_iam_role" "karpenter_irsa" {
       }
     }]
   })
-  tags = merge(local.common_tags, { Name = "${local.project_id}-karpenter-irsa" })
+  tags = merge(local.common_tags, { Name = "${local.project_id}-karpenter-irsa-role" })
 }
 
 resource "aws_iam_role_policy_attachment" "karpenter_irsa" {
@@ -229,43 +229,20 @@ resource "aws_iam_role_policy" "karpenter_irsa_extra" {
 # Hackery.  I don't like this.
 #
 
-resource "local_file" "karpenter_role_entry" {
-  content = templatefile("${path.module}/karpenter-role-entry.yaml.tmpl", {
-    account_id          = data.aws_caller_identity.current.account_id
-    karpenter_role_name = aws_iam_role.karpenter.name
-  })
-  filename = "${path.module}/karpenter-role-entry.yaml"
+resource "kubectl_manifest" "aws_auth" {
+  yaml_body = local.aws_auth
 }
 
+#resource "local_file" "aws-auth-yaml" {
+#  content = templatefile("${path.module}/aws-auth.yaml.tmpl", {
+#    account_id          = data.aws_caller_identity.current.account_id
+#    karpenter_role_name = aws_iam_role.karpenter.name
+#    nodes_role_name     = aws_iam_role.nodes.name
+#  })
+#  filename = "${path.module}/aws-auth.yaml"
+#}
+
 #resource "null_resource" "inject_karpenter_role" {
-#  depends_on = [aws_eks_cluster.this, helm_release.karpenter, local_file.karpenter_role_entry]
-#
-#  provisioner "local-exec" {
-#    command = <<EOT
-#    set -e
-#
-#    # Dump existing aws-auth
-#    kubectl get configmap aws-auth -n kube-system -o yaml > aws-auth-current.yaml
-#
-#    # Extract mapRoles, append new role
-#    yq eval '.data.mapRoles' aws-auth-current.yaml > mapRoles.yaml
-#    cat ${path.module}/karpenter-role-entry.yaml >> mapRoles.yaml
-#
-#    # Replace mapRoles safely
-#    yq eval --inplace '.data.mapRoles = strenv(MAPROLES)' aws-auth-current.yaml
-#
-#    export MAPROLES="$(<mapRoles.yaml)"
-#
-#    # Apply full ConfigMap
-#    kubectl apply -f aws-auth-current.yaml
-#
-#    # Cleanup
-#    rm aws-auth-current.yaml mapRoles.yaml
-#    EOT
-#    environment = {
-#      PATH = "/usr/local/bin:${PATH}"
-#    }
-#  }
 #}
 
 
@@ -289,7 +266,7 @@ resource "helm_release" "karpenter" {
 }
 
 resource "aws_iam_role" "karpenter" {
-  name = "${local.project_id}-karpenter"
+  name = "${local.project_id}-karpenter-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{

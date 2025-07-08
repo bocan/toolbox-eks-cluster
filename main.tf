@@ -14,6 +14,12 @@ locals {
 
   create_vpc = var.create_vpc
   vpc_id     = var.vpc_id
+
+  aws_auth = templatefile("${path.module}/aws-auth.yaml.tmpl", {
+    account_id          = data.aws_caller_identity.current.account_id
+    karpenter_role_name = aws_iam_role.karpenter.name
+    nodes_role_name     = aws_iam_role.nodes.name
+  })
 }
 
 module "vpc" {

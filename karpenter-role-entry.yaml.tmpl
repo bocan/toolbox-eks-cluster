@@ -1,7 +1,0 @@
-data:
-  mapRoles: |
-    - rolearn: arn:aws:iam::${account_id}:role/${karpenter_role_name}
-      username: system:node:{{EC2PrivateDNSName}}
-      groups:
-        - system:bootstrappers
-        - system:nodes
