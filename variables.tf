@@ -28,4 +28,3 @@ variable "create_vpc" {
   description = "Whether to create a new VPC or use an existing one"
   default     = true
 }
-
