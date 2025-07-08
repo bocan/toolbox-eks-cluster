@@ -225,31 +225,13 @@ resource "aws_iam_role_policy" "karpenter_irsa_extra" {
   })
 }
 
-#
-# Hackery.  I don't like this.
-#
-
 resource "kubectl_manifest" "aws_auth" {
   yaml_body = local.aws_auth
 }
 
-#resource "local_file" "aws-auth-yaml" {
-#  content = templatefile("${path.module}/aws-auth.yaml.tmpl", {
-#    account_id          = data.aws_caller_identity.current.account_id
-#    karpenter_role_name = aws_iam_role.karpenter.name
-#    nodes_role_name     = aws_iam_role.nodes.name
-#  })
-#  filename = "${path.module}/aws-auth.yaml"
-#}
-
-#resource "null_resource" "inject_karpenter_role" {
-#}
-
-
 # ------------------------
 # Karpenter Setup
 # ------------------------
-
 resource "helm_release" "karpenter" {
   name             = "karpenter"
   repository       = "oci://public.ecr.aws/karpenter"
@@ -263,6 +245,9 @@ resource "helm_release" "karpenter" {
     instance_profile = aws_iam_instance_profile.karpenter.name
     role_arn         = aws_iam_role.karpenter_irsa.arn
   })]
+  depends_on = [
+    kubectl_manifest.aws_auth
+  ]
 }
 
 resource "aws_iam_role" "karpenter" {
