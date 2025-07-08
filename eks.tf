@@ -104,9 +104,7 @@ resource "aws_launch_template" "eks_managed" {
 
   tag_specifications {
     resource_type = "instance"
-    tags          = merge(local.common_tags, {
-      Name = "${local.project_id}-eks-ng"
-    })
+    tags          = merge(local.common_tags, { Name = "${local.project_id}-eks-ng" })
   }
 }
 
@@ -130,9 +128,8 @@ resource "aws_eks_node_group" "managed" {
     version = "$Latest"
   }
 
-  instance_types = ["t4g.medium"]
-  ami_type       = "AL2023_ARM_64_STANDARD"
-  capacity_type  = "SPOT"
+  ami_type      = "AL2023_ARM_64_STANDARD"
+  capacity_type = "SPOT"
 
   tags = merge(local.common_tags, { Name = "${local.project_id}-managed-nodes" })
 
