@@ -84,6 +84,31 @@ resource "aws_eks_addon" "pod_identity" {
   tags                        = merge(local.common_tags, { Name = "${local.project_id}-pod-identity" })
 }
 
+# ---------------------------
+# LAUNCH TEMPLATE FOR NODE GROUP
+# ---------------------------
+resource "aws_launch_template" "eks_managed" {
+  name_prefix   = "${local.project_id}-eks-ng-"
+  image_id      = null # Let EKS manage the AMI unless you have a custom one
+  instance_type = "t4g.medium"
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      volume_size           = 20
+      volume_type           = "gp3"
+      encrypted             = true
+      delete_on_termination = true
+    }
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+    tags          = merge(local.common_tags, {
+      Name = "${local.project_id}-eks-ng"
+    })
+  }
+}
 
 # ------------------------
 # Managed Node Group
@@ -98,6 +123,11 @@ resource "aws_eks_node_group" "managed" {
     desired_size = 2
     max_size     = 2
     min_size     = 2
+  }
+
+  launch_template {
+    id      = aws_launch_template.eks_managed.id
+    version = "$Latest"
   }
 
   instance_types = ["t4g.medium"]
