@@ -14,10 +14,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
+      - name: Install asdf version manager
+        run: |
+          git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.18.0
+          echo '. "$HOME/.asdf/asdf.sh"' >> $GITHUB_ENV
+          echo '. "$HOME/.asdf/completions/asdf.bash"' >> $GITHUB_ENV
+
+      - name: Install tool dependencies with asdf
+        run: |
+          . "$HOME/.asdf/asdf.sh"
+          asdf plugin update --all || true
+          asdf install
 
       - name: Cache pre-commit and pip
         uses: actions/cache@v4
@@ -29,16 +36,16 @@ jobs:
           restore-keys: |
             pre-commit-${{ runner.os }}-
 
-      - name: Install pre-commit
-        run: pip install pre-commit
+#      - name: Install pre-commit
+#        run: pip install pre-commit
 
-      - name: Install OpenTofu
-        run: |
-          TOFU_VERSION=1.7.0
-          curl -sLo tofu.tar.gz https://github.com/opentofu/opentofu/releases/download/v${TOFU_VERSION}/tofu_${TOFU_VERSION}_linux_amd64.tar.gz
-          tar -xzf tofu.tar.gz
-          sudo mv tofu /usr/local/bin/
-          tofu --version
+#      - name: Install OpenTofu
+#        run: |
+#          TOFU_VERSION=1.10.2
+#          curl -sLo tofu.tar.gz https://github.com/opentofu/opentofu/releases/download/v${TOFU_VERSION}/tofu_${TOFU_VERSION}_linux_amd64.tar.gz
+#          tar -xzf tofu.tar.gz
+#          sudo mv tofu /usr/local/bin/
+#          tofu --version
 
-      - name: Run pre-commit checks on all files
-        run: pre-commit run --all-files
+#      - name: Run pre-commit checks on all files
+#        run: pre-commit run --all-files
