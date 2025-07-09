@@ -20,6 +20,9 @@ locals {
     karpenter_role_name = aws_iam_role.karpenter.name
     nodes_role_name     = aws_iam_role.nodes.name
   })
+
+  machine_type = var.architecture == "arm64" ? "t4g" : "t3"
+
 }
 
 module "vpc" {
@@ -36,5 +39,4 @@ module "vpclookup" {
   source = "./modules/vpclookup"
 
   vpc_id = local.vpc_id
-  #cidr_block  = local.cidr_block
 }
