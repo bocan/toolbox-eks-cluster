@@ -90,7 +90,7 @@ resource "aws_eks_addon" "pod_identity" {
 resource "aws_launch_template" "eks_managed" {
   name_prefix   = "${local.project_id}-eks-ng-"
   image_id      = null # Let EKS manage the AMI unless you have a custom one
-  instance_type = "t4g.medium"
+  instance_type = "${local.machine_type}.medium"
 
   metadata_options {
     http_tokens = "required"
@@ -132,7 +132,7 @@ resource "aws_eks_node_group" "managed" {
     version = "$Latest"
   }
 
-  ami_type      = "AL2023_ARM_64_STANDARD"
+  ami_type      = var.architecture == "arm64" ? "AL2023_ARM_64_STANDARD" : "AL2023_x86_64_STANDARD"
   capacity_type = "SPOT"
 
   tags = merge(local.common_tags, { Name = "${local.project_id}-managed-nodes" })
@@ -354,10 +354,10 @@ spec:
       requirements:
         - key: "node.kubernetes.io/instance-type"
           operator: In
-          values: ["t4g.small", "t4g.medium", "t4g.large"]
+          values: ["${local.machine_type}.small", "${local.machine_type}.medium", "${local.machine_type}.large"]
         - key: "kubernetes.io/arch"
           operator: In
-          values: ["arm64"]
+          values: ["${var.architecture}"]
   limits:
     cpu: 1000
   disruption:

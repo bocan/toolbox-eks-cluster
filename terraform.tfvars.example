@@ -5,6 +5,9 @@ shortname    = "chrisfu"
 region       = "eu-west-1"
 cidr_block   = "10.3.0.0/16"
 
+# arm64 or amd64
+architecture = "arm64"
+
 common_tags = {
   Environment = "Temporary Lab: eks-lab-chrisfu"
   ManagedBy   = "Terraform"
