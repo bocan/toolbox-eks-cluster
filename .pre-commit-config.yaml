@@ -8,6 +8,8 @@ repos:
   rev: v5.0.0
   hooks:
     - id: check-yaml
+      args:
+        - --multi
     - id: check-added-large-files
     - id: detect-aws-credentials
     - id: trailing-whitespace
@@ -29,3 +31,7 @@ repos:
     - id: terraform_tflint
       args:
         - --args=--recursive
+    - id: terraform_trivy
+      args:
+        - --args=-s HIGH,CRITICAL
+        - --args=--tf-vars terraform.tfvars

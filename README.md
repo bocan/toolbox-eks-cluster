@@ -63,7 +63,7 @@ tofu init
 
 ### 4. Review and set variables
 
-Edit `terraform.tfvars` or set variables as needed (see [Inputs](#inputs) below).
+Copy `terraform.tfvars.example` to `terraform.tfvars`, edit the variables as needed (see [Inputs](#inputs) below).
 
 ### 5. Create your EKS cluster
 

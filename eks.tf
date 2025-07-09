@@ -92,6 +92,10 @@ resource "aws_launch_template" "eks_managed" {
   image_id      = null # Let EKS manage the AMI unless you have a custom one
   instance_type = "t4g.medium"
 
+  metadata_options {
+    http_tokens = "required"
+  }
+
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
