@@ -354,7 +354,7 @@ spec:
       requirements:
         - key: "node.kubernetes.io/instance-type"
           operator: In
-          values: ["${local.machine_type}.small", "${local.machine_type}.medium", "${local.machine_type}.large"]
+          values: ["${local.machine_type}.micro", "${local.machine_type}.small", "${local.machine_type}.medium", "${local.machine_type}.large"]
         - key: "kubernetes.io/arch"
           operator: In
           values: ["${var.architecture}"]
