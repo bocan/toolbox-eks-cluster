@@ -19,8 +19,25 @@ jobs:
         with:
           python-version: '3.13'
 
+      - name: Cache pre-commit and pip
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pre-commit
+            ~/.cache/pip
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-${{ runner.os }}-
+
       - name: Install pre-commit
         run: pip install pre-commit
+
+      - name: Install OpenTofu
+        run: |
+          curl -sLo tofu.tar.gz https://github.com/opentofu/opentofu/releases/latest/download/opentofu_linux_amd64.tar.gz
+          tar -xzf tofu.tar.gz
+          sudo mv tofu /usr/local/bin/
+          tofu --version
 
       - name: Run pre-commit checks on all files
         run: pre-commit run --all-files
