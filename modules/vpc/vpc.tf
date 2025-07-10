@@ -134,6 +134,26 @@ resource "aws_kms_key" "cloudwatch_logs" {
     Id      = "key-default-1"
     Statement = [
       {
+        "Sid" : "AllowCloudWatchLogsUse",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "logs.eu-west-1.amazonaws.com"
+        },
+        "Action" : [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ],
+        "Resource" : "*",
+        "Condition" : {
+          "ArnLike" : {
+            "kms:EncryptionContext:aws:logs:arn" : "arn:aws:logs:eu-west-1:${data.aws_caller_identity.current.account_id}:*"
+          }
+        }
+      },
+      {
         Sid    = "AllowRootAccountFullAccess"
         Effect = "Allow"
         Principal = {

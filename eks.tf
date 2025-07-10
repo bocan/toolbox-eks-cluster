@@ -166,7 +166,7 @@ resource "aws_eks_node_group" "managed" {
 
   launch_template {
     id      = aws_launch_template.eks_managed.id
-    version = "$Latest"
+    version = aws_launch_template.eks_managed.latest_version
   }
 
   ami_type      = var.architecture == "arm64" ? "AL2023_ARM_64_STANDARD" : "AL2023_x86_64_STANDARD"
@@ -176,6 +176,7 @@ resource "aws_eks_node_group" "managed" {
 
   labels = {
     "karpenter.sh/controller" = "true"
+    "nodegroup-type"          = "critical"
   }
 }
 
@@ -390,6 +391,9 @@ metadata:
   name: default
 spec:
   template:
+    metadata:
+      labels:
+        nodegroup-type: "karpenter"
     spec:
       nodeClassRef:
         group: karpenter.k8s.aws
