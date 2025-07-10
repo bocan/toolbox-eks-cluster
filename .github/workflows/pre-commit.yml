@@ -32,6 +32,10 @@ jobs:
           restore-keys: |
             pre-commit-${{ runner.os }}-
 
+      - name: debug
+        run: |
+          type terraform
+
       - name: Set env
         run: echo "PCT_TFPATH=tofu" >> $GITHUB_ENV
 
