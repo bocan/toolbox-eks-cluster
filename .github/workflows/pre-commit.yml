@@ -27,5 +27,11 @@ jobs:
           restore-keys: |
             pre-commit-${{ runner.os }}-
 
+      - name: Debugging
+        run: |
+          env
+          echo $PATH
+          type tofu
+
       - name: Run pre-commit checks on all files
         run: pre-commit run --all-files
