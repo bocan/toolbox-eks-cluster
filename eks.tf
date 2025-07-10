@@ -5,12 +5,49 @@ resource "aws_kms_key" "eks" {
   description         = "EKS encryption key"
   enable_key_rotation = true
   tags                = merge(local.common_tags, { Name = "${local.project_id}-kms" })
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "key-default-1"
+    Statement = [
+      {
+        Sid    = "AllowRootAccountFullAccess"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "AllowAllIAMUsersInAccountToUseKey"
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "kms:CallerAccount" = data.aws_caller_identity.current.account_id
+          }
+        }
+      }
+    ]
+  })
 }
 
 # ------------------------
 # EKS Cluster
 # ------------------------
 resource "aws_eks_cluster" "this" {
+  #checkov:skip=CKV_AWS_38:We want access from anywhere. This isn't for produciton. Just testing / demo / development purposes
+  #checkov:skip=CKV_AWS_39:We want access from anywhere. This isn't for produciton. Just testing / demo / development purposes
   name     = "${local.project_id}-eks"
   role_arn = aws_iam_role.eks.arn
   version  = "1.32"
@@ -205,6 +242,8 @@ resource "aws_iam_role_policy_attachment" "karpenter_irsa" {
 }
 
 resource "aws_iam_role_policy" "karpenter_node_extra" {
+  #checkov:skip=CKV_AWS_288: This is a required policy for Karpenter node role to function properly
+  #checkov:skip=CKV_AWS_355: This is a required policy for Karpenter node role to function properly
   name = "${local.project_id}-karpenter-node-extra"
   role = aws_iam_role.karpenter.name
 
@@ -221,6 +260,11 @@ resource "aws_iam_role_policy" "karpenter_node_extra" {
 }
 
 resource "aws_iam_role_policy" "karpenter_irsa_extra" {
+  #checkov:skip=CKV_AWS_286: This is a required policy for Karpenter IRSA to function properly
+  #checkov:skip=CKV_AWS_288: This is a required policy for Karpenter IRSA to function properly
+  #checkov:skip=CKV_AWS_289: This is a required policy for Karpenter IRSA to function properly
+  #checkov:skip=CKV_AWS_290: This is a required policy for Karpenter IRSA to function properly
+  #checkov:skip=CKV_AWS_355: This is a required policy for Karpenter IRSA to function properly
   name = "${local.project_id}-karpenter-irsa-extra"
   role = aws_iam_role.karpenter_irsa.id
 

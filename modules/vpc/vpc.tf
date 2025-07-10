@@ -6,12 +6,17 @@ resource "aws_vpc" "this" {
   tags                             = merge(var.common_tags, { Name = "${var.project_id}-vpc" })
 }
 
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.this.id
+}
+
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
   tags   = merge(var.common_tags, { Name = "${var.project_id}-igw" })
 }
 
 resource "aws_subnet" "public" {
+  #checkov:skip=CKV_AWS_130:We want a public subnet. This isn't for produciton. Just testing / demo / development purposes
   count                           = 3
   vpc_id                          = aws_vpc.this.id
   cidr_block                      = cidrsubnet(aws_vpc.this.cidr_block, 8, count.index)
@@ -119,10 +124,53 @@ resource "aws_iam_role_policy" "flow_logs" {
   })
 }
 
+resource "aws_kms_key" "cloudwatch_logs" {
+  description             = "KMS key for encrypting CloudWatch Log Groups"
+  enable_key_rotation     = true
+  deletion_window_in_days = 10
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "key-default-1"
+    Statement = [
+      {
+        Sid    = "AllowRootAccountFullAccess"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "AllowAllIAMUsersInAccountToUseKey"
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "kms:CallerAccount" = data.aws_caller_identity.current.account_id
+          }
+        }
+      }
+    ]
+  })
+}
+
 resource "aws_cloudwatch_log_group" "vpc_logs" {
   name              = "/aws/vpc/${var.project_id}-flow-logs"
-  retention_in_days = 3
+  retention_in_days = 365
   tags              = merge(var.common_tags, { Name = "${var.project_id}-flow-logs" })
+  kms_key_id        = aws_kms_key.cloudwatch_logs.arn
 }
 
 resource "aws_flow_log" "vpc" {
