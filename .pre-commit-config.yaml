@@ -27,6 +27,7 @@ repos:
     - id: terraform_validate
       args:
         - --hook-config=--tf-path=tofu
+      verbose: true
       exclude: \.terraform\.lock\.hcl
     - id: terraform_tflint
       args:
