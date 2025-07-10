@@ -15,16 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install asdf version manager
-        run: |
-          git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.18.0
-          echo '. "$HOME/.asdf/asdf.sh"' >> $GITHUB_ENV
-          echo '. "$HOME/.asdf/completions/asdf.bash"' >> $GITHUB_ENV
-
-      - name: Install tool dependencies with asdf
-        run: |
-          . "$HOME/.asdf/asdf.sh"
-          asdf plugin update --all || true
-          asdf install
+        uses: asdf-vm/actions/install@v4
 
       - name: Cache pre-commit and pip
         uses: actions/cache@v4
