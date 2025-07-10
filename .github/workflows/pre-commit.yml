@@ -1,5 +1,7 @@
 name: pre-commit checks
 
+permissions: read-all
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]

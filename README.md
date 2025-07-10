@@ -2,6 +2,7 @@
 
 [![Pre-commit Checks](https://img.shields.io/badge/pre--commit-enabled-brightgreen)](https://pre-commit.com/)
 [![Terraform](https://img.shields.io/badge/terraform--docs-automated-blueviolet)](https://terraform-docs.io/)
+[![pre-commit checks](https://github.com/bocan/toolbox-eks-cluster/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/bocan/toolbox-eks-cluster/actions/workflows/pre-commit.yml)
 
 A simple tool to quickly provision and manage a cost-effective Amazon EKS (Elastic Kubernetes Service) cluster on AWS, designed for rapid prototyping, dev/test environments, and learning Kubernetes on the cloud. This is NOT mean for production use!
 

@@ -39,3 +39,7 @@ repos:
       args:
         - --args=-s HIGH,CRITICAL
         - --args=--tf-vars terraform.tfvars.example
+    - id: terraform_checkov
+      args:
+        - --args=--var-file terraform.tfvars.example
+        - --args=--skip-path tests
