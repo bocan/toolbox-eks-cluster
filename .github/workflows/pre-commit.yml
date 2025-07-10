@@ -1,0 +1,36 @@
+name: pre-commit checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:   # <-- This enables manual runs from the Actions tab
+
+jobs:
+  pre-commit:
+    name: Run pre-commit checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install asdf version manager
+        uses: asdf-vm/actions/install@v4
+
+      - name: Cache Stuff
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache
+            ~/.asdf
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-${{ runner.os }}-
+
+      - name: Run pre-commit checks on all files
+        run: pre-commit run --all-files
