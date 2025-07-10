@@ -14,6 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
       - name: Install asdf version manager
         uses: asdf-vm/actions/install@v4
 
@@ -29,9 +34,7 @@ jobs:
 
       - name: Debugging
         run: |
-          env
-          echo $PATH
-          type tofu
+          tofu version
 
       - name: Run pre-commit checks on all files
         run: pre-commit run --all-files

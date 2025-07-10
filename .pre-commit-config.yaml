@@ -23,10 +23,10 @@ repos:
         - --args=--lockfile=false
     - id: terraform_fmt
       args:
-        - --hook-config=--tf-path=tofu
+        - --hook-config=--tf-path=/home/runner/.asdf/shims/tofu
     - id: terraform_validate
       args:
-        - --hook-config=--tf-path=tofu
+        - --hook-config=--tf-path=/home/runner/.asdf/shims/tofu
     - id: terraform_tflint
       args:
         - --args=--recursive
