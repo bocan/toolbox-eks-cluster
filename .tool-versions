@@ -1,0 +1,7 @@
+python 3.13.4
+opentofu 1.10.2
+checkov 3.2.450
+kubectl 1.33.2
+pre-commit 4.2.0
+terraform-docs 0.20.0
+tflint 0.58.0
