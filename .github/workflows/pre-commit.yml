@@ -19,9 +19,6 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install asdf version manager
-        uses: asdf-vm/actions/install@v4
-
       - name: Cache Stuff
         uses: actions/cache@v4
         with:
@@ -31,6 +28,9 @@ jobs:
           key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
           restore-keys: |
             pre-commit-${{ runner.os }}-
+
+      - name: Install asdf version manager
+        uses: asdf-vm/actions/install@v4
 
       - name: Run pre-commit checks on all files
         run: pre-commit run --all-files
