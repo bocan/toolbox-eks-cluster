@@ -20,6 +20,7 @@ repos:
   hooks:
     - id: terraform_providers_lock
       args:
+        - --hook-config=--mode=only-check-is-current-lockfile-cross-platform
         - --hook-config=--tf-path=tofu
         - --args=-platform=linux_amd64
         - --args=-platform=darwin_arm64
@@ -32,6 +33,7 @@ repos:
     - id: terraform_validate
       args:
         - --hook-config=--tf-path=tofu
+        - --hook-config=--retry-once-with-cleanup=true
     - id: terraform_tflint
       args:
         - --args=--recursive
