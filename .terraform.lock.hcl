@@ -3,7 +3,7 @@
 
 provider "registry.opentofu.org/gavinbunney/kubectl" {
   version     = "1.19.0"
-  constraints = ">= 1.19.0"
+  constraints = "~> 1.19.0"
   hashes = [
     "h1:9QkxPjp0x5FZFfJbE+B7hBOoads9gmdfj9aYu5N4Sfc=",
     "h1:quymfa/OKEfWI5JXFEwGbUY2aAy0vet3rA9JWJam+3k=",
@@ -27,7 +27,7 @@ provider "registry.opentofu.org/gavinbunney/kubectl" {
 
 provider "registry.opentofu.org/hashicorp/aws" {
   version     = "6.2.0"
-  constraints = ">= 5.83.0, >= 6.2.0"
+  constraints = ">= 6.0.0, >= 6.2.0, ~> 6.2.0"
   hashes = [
     "h1:UcBl0SyNxOTHOa3Ske3ClmzA7V1S7e/I4+29DLGe85A=",
     "h1:mF9eqJ/lFNk4ZYOnoK31tzDuV9s+v79sko9wj5lcrSE=",
@@ -45,7 +45,7 @@ provider "registry.opentofu.org/hashicorp/aws" {
 
 provider "registry.opentofu.org/hashicorp/helm" {
   version     = "3.0.2"
-  constraints = ">= 3.0.2"
+  constraints = "~> 3.0.2"
   hashes = [
     "h1:17Ro1Gs9aCN5QGQ6RDvuianmNV3AxgegYqTJODlYdHI=",
     "h1:GMW0C0TkkYmURt4OZIlwcLdvREL08PDbsSn5sfH4/TU=",
