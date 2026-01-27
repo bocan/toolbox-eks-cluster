@@ -4,5 +4,5 @@ kubectl 1.34.1
 pre-commit 4.3.0
 terraform-docs 0.20.0
 tflint 0.60.0
-cosign 2.6.1
+cosign 2.6.2
 trivy 0.67.2
