@@ -1,19 +1,19 @@
 terraform {
-  # Tested with OpenTofu 1.10.2
-  required_version = ">= 1.10.2"
+  # Tested with OpenTofu 1.11.4
+  required_version = ">= 1.11.4"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.2.0"
+      version = ">= 6.28.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 3.0.2"
+      version = ">= 3.1.1"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = "~> 1.19.0"
+      version = ">= 1.19.0"
     }
   }
 }
