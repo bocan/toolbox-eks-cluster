@@ -1,47 +1,75 @@
 repos:
-- repo: https://github.com/gitleaks/gitleaks
-  rev: v8.27.2
-  hooks:
-    - id: gitleaks
-      args: ['--verbose']
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
-  hooks:
-    - id: check-yaml
-      args:
-        - --multi
-    - id: check-added-large-files
-    - id: trailing-whitespace
-    - id: end-of-file-fixer
-    - id: mixed-line-ending
-      args: ['--fix=lf']
-- repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.99.5
-  hooks:
-    - id: terraform_providers_lock
-      args:
-        - --hook-config=--mode=only-check-is-current-lockfile-cross-platform
-        - --hook-config=--tf-path=tofu
-        - --args=-platform=linux_amd64
-        - --args=-platform=darwin_arm64
-    - id: terraform_docs
-      args:
-        - --args=--lockfile=false
-    - id: terraform_fmt
-      args:
-        - --hook-config=--tf-path=tofu
-    - id: terraform_validate
-      args:
-        - --hook-config=--tf-path=tofu
-        - --hook-config=--retry-once-with-cleanup=true
-    - id: terraform_tflint
-      args:
-        - --args=--recursive
-    - id: terraform_trivy
-      args:
-        - --args=-s HIGH,CRITICAL
-        - --args=--tf-vars terraform.tfvars.example
-    - id: terraform_checkov
-      args:
-        - --args=--var-file terraform.tfvars.example
-        - --args=--skip-path tests
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+        name: "🔒 security · Detect hardcoded secrets"
+        args: ["--verbose"]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+        name: "🌳 git · Detect conflict markers"
+      - id: check-yaml
+        name: "🌳 git · Check YAML Files"
+        args:
+          - --multi
+      - id: check-added-large-files
+        name: "🌳 git · Block large file commits"
+        args: ["--maxkb=5000"]
+      - id: trailing-whitespace
+        name: "🌳 git · Check For Trailing Whitespace"
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+        name: "🌳 git · Check End-Of-Files"
+      - id: mixed-line-ending
+        name: "🌳 git · Check For Mixed Line Ending"
+        args: ["--fix=lf"]
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.105.0
+    hooks:
+      - id: terraform_providers_lock
+        name: "Ⓣ  terraform · Check Terraform Providers Lock File"
+        args:
+          - --hook-config=--mode=regenerate-lockfile-if-some-platform-missed
+          - --hook-config=--tf-path=tofu
+          - --hook-config=--mode=only-check-is-current-lockfile-cross-platform
+          - --args=-platform=linux_amd64
+          - --args=-platform=darwin_arm64
+      - id: terraform_docs
+        name: "Ⓣ  terraform · Generate documentation"
+        args:
+          - --args=--lockfile=false
+      - id: terraform_fmt
+        name: "Ⓣ  terraform · Format Terraform Files"
+        args:
+          - --hook-config=--tf-path=tofu
+      - id: terraform_validate
+        name: "Ⓣ  terraform · Validate Terraform Files"
+        args:
+          - --hook-config=--tf-path=tofu
+      - id: terraform_tflint
+        name: "Ⓣ  terraform · Lint Terraform Files"
+        args:
+          - --args=--recursive
+      - id: terraform_trivy
+        name: "Ⓣ  terraform · Scan Terraform Files for vulnerabilities"
+        args:
+          - --args=-s HIGH,CRITICAL
+          - --args=--tf-vars terraform.tfvars.example
+      - id: terraform_checkov
+        name: "Ⓣ  terraform · Checkov scan for Terraform Files"
+        args:
+          - --args=--var-file terraform.tfvars.example
+          - --args=--skip-path tests
+          - --args=--soft-fail-on MEDIUM
+          - --args=--skip-check CKV_TF_1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.14
+    hooks:
+      - id: ruff-format
+        name: "🐍 python · Format with Ruff"
+      # STRICT
+      - id: ruff
+        name: "🐍 python · Lint with Ruff"
+        args: [--fix]
