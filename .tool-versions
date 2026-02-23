@@ -5,4 +5,4 @@ pre-commit 4.5.1
 terraform-docs 0.21.0
 tflint 0.61.0
 cosign 3.0.5
-trivy 0.68.2
+trivy 0.69.1
