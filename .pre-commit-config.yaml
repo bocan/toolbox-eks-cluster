@@ -65,7 +65,7 @@ repos:
           - --args=--soft-fail-on MEDIUM
           - --args=--skip-check CKV_TF_1
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.14
+    rev: v0.15.2
     hooks:
       - id: ruff-format
         name: "🐍 python · Format with Ruff"
