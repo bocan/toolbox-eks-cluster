@@ -1,8 +1,8 @@
 opentofu 1.13.9
-checkov 3.2.506
+checkov 3.4.3
 kubectl 1.37.2
 pre-commit 4.7.0
-terraform-docs 0.21.0
-tflint 0.61.0
+terraform-docs 0.24.0
+tflint 0.66.0
 cosign 3.1.4
 trivy 0.76.2
