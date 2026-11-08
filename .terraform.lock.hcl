@@ -5,8 +5,20 @@ provider "registry.opentofu.org/gavinbunney/kubectl" {
   version     = "1.19.0"
   constraints = ">= 1.19.0"
   hashes = [
+    "h1:/KiSv1EYOBNWL2Op7BqTmqnc/G2W/WvXIhUZlhnK0to=",
+    "h1:3E8E5zdLYTLsP9h+Ibvez8m+S0Qqa7QULHvcq8PcnWg=",
     "h1:9QkxPjp0x5FZFfJbE+B7hBOoads9gmdfj9aYu5N4Sfc=",
+    "h1:DJC655V2Lw7zER1Gi+yN1ijW3A+bUAI3MucdYVhGxFY=",
+    "h1:EL1HfCDfY/pabIJ2kXuppTvqhgY9hfLu2o4TonJheT8=",
+    "h1:aQUITuBBjv8WJ+WGI0bOZXXYi5s09pMEyyJmlFnuUbE=",
+    "h1:gwnJt0UeVYnD2u8S0nGbQHvrUccNL3jeCqf9xu0X13I=",
+    "h1:hzxgobCLhmbGcgC2KD6aYleH17hiblT9vIHyEQKb1VA=",
+    "h1:iV249UVwKvuNaFHcvba4SitTyWpUNGvqdyy6SatjjH4=",
+    "h1:jTkF6nmuZvbXvl08L6iwe2RfV4PkPdy2Cnn+7aWkgu8=",
+    "h1:kevkHUKdNWcl+ET894COOV9i18hXeACWfu4AJXct/b0=",
+    "h1:ovkjqc3GnFlb5mVY51ZFV3VwrSbxQQtMTXYvEmBs2xg=",
     "h1:quymfa/OKEfWI5JXFEwGbUY2aAy0vet3rA9JWJam+3k=",
+    "h1:tm5Tw1sfVURwtKGB34mUqekBxgo4HqANIV+uyrucYjA=",
     "zh:1dec8766336ac5b00b3d8f62e3fff6390f5f60699c9299920fc9861a76f00c71",
     "zh:43f101b56b58d7fead6a511728b4e09f7c41dc2e3963f59cf1c146c4767c6cb7",
     "zh:4c4fbaa44f60e722f25cc05ee11dfaec282893c5c0ffa27bc88c382dbfbaa35c",
