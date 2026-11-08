@@ -38,7 +38,7 @@ jobs:
           RELEASE_BRANCHES: main
 
       - name: Tag and Create a Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           token: ${{ env.GITHUB_USER_TOKEN }}
           tag_name: ${{ steps.tag.outputs.new_tag }}
