@@ -1,0 +1,20 @@
+# Most resources will be named using the following 2 variables:
+project_name = "eks-lab"
+shortname    = "chrisfu"
+
+region     = "eu-west-1"
+cidr_block = "10.3.0.0/16"
+
+# arm64 or amd64
+architecture = "amd64"
+
+common_tags = {
+  Environment = "Temporary Lab: eks-lab-chrisfu"
+  ManagedBy   = "Terraform"
+  Note        = "This is a temporary lab environment being used for testing / experimentation"
+  Owner       = "Chris Funderburg"
+}
+
+# Replace with your existing VPC ID if create_vpc is false. Ignored otherwise.
+create_vpc = true
+vpc_id     = "vpc-12345678901234567"

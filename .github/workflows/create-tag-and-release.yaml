@@ -1,0 +1,46 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+name: create-tag-and-release
+
+permissions:
+  contents: read
+
+env:
+  GITHUB_USER_TOKEN: ${{ secrets.MY_USER_TOKEN }}
+  GITHUB_USER_EMAIL: ${{ secrets.MY_USER_EMAIL }}
+  GITHUB_USER_UNAME: ${{ secrets.MY_USER_UNAME }}
+
+jobs:
+  tag-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Configure Git Credentials
+        run: |
+          git config --global url."https://${{ env.GITHUB_USER_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+          git config --global user.email ${{ env.GITHUB_USER_EMAIL }}
+          git config --global user.name ${{ env.GITHUB_USER_NAME }}
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1
+        id: tag
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_USER_TOKEN }}
+          WITH_V: true
+          RELEASE_BRANCHES: main
+
+      - name: Tag and Create a Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ env.GITHUB_USER_TOKEN }}
+          tag_name: ${{ steps.tag.outputs.new_tag }}
+          generate_release_notes: true
+          make_latest: true
