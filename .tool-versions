@@ -1,5 +1,5 @@
 opentofu 1.13.9
-checkov 3.4.3
+checkov 3.4.5
 kubectl 1.37.2
 pre-commit 4.7.0
 terraform-docs 0.24.0
