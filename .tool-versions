@@ -1,4 +1,4 @@
-opentofu 1.13.9
+opentofu 1.13.10
 checkov 3.4.5
 kubectl 1.37.2
 pre-commit 4.7.0
