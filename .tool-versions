@@ -1,6 +1,6 @@
 opentofu 1.13.9
 checkov 3.4.5
-kubectl 1.37.2
+kubectl 1.37.3
 pre-commit 4.7.0
 terraform-docs 0.25.1
 tflint 0.66.0
